@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import {Movie} from './components/Movie';
 import {Map} from './components/Map';
+import {Chat} from './components/Chat';
 import './style/index.css';
 import App from './components/App';
 import reportWebVitals from './reportWebVitals';
