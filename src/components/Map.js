@@ -9,10 +9,6 @@ import 'leaflet/dist/leaflet.css';
 
 export class Map extends React.Component {
 
-    constructor(props) {
-        super(props);
-    };
-
     static propTypes = {
         position: PropTypes.arrayOf(Number).isRequired
     };
