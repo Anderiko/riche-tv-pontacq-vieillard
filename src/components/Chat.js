@@ -8,7 +8,9 @@ export class Chat extends React.Component {
     chatHistory: [],
   };
 
-  formatter = new Intl.DateTimeFormat('en-US', {year: 'numeric', month: '2-digit',day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'});
+  chatRef = React.createRef();
+
+  formatter = new Intl.DateTimeFormat('fr-FR', {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'});
 
   componentDidMount() {
     const socket = new WebSocket('wss://imr3-react.herokuapp.com/');
@@ -19,12 +21,10 @@ export class Chat extends React.Component {
     };
 
     socket.onmessage = (event) => {
-      const data = JSON.parse(event.data).filter((data) => data.name !== 'Rick');
+      const data = JSON.parse(event.data).filter((data) => !['Rick', "dsqdq", "", null].includes(data.name));
       this.setState((prevState) => ({
         chatHistory: [...prevState.chatHistory, ...data],
       }));
-
-      console.log("coucou", this.state.chatHistory);
     };
   }
 
@@ -32,11 +32,16 @@ export class Chat extends React.Component {
     this.state.socket.close();
   }
 
+  componentDidUpdate() {
+    const chat = this.chatRef.current;
+    chat.scrollTop = chat.scrollHeight;
+  }
+
   sendMessage = (event) => {
     event.preventDefault();
-    if (!this.state.socket) {
-      return;
-    }
+    if (!this.state.socket) return;
+    if (!this.state.name) return alert('Please enter your name');
+    if (!this.state.message) return;
 
     const currentTime = Date.now();
     this.state.socket.send(
@@ -46,13 +51,30 @@ export class Chat extends React.Component {
         message: this.state.message,
       })
     );
+
     this.setState({ message: '' });
   };
 
   render() {
     return (
       <div>
-        <h1>Chat</h1>
+        <div ref={this.chatRef} className="chat-messages-container">
+          {this.state.chatHistory.map((data, index) => (
+            <div key={index} className={`message ${this.state.name.toLowerCase() === data.name.toLowerCase() ? "my-message" : ""}`}>
+              <div className="message-name">{data.name}</div>
+              
+              <div className="message-content">
+                <div className="message-text">{data.message}</div>
+              </div>
+
+              <div className="timestamp">
+                {this.formatter.format(data.when)}
+              </div>
+            </div>
+          ))}
+        </div>
+
+
         <form onSubmit={this.sendMessage}>
           <input
             type="text"
@@ -65,16 +87,10 @@ export class Chat extends React.Component {
             placeholder="Type a message"
             value={this.state.message}
             onChange={(event) => this.setState({ message: event.target.value })}
+            autoFocus
           />
-          <button type="submit">Send</button>
+          <button type="submit">→</button>
         </form>
-        <div>
-          {this.state.chatHistory.map((data, index) => (
-            <div key={index}>
-              [{this.formatter.format(data.when)}] {data.name}: {data.message}
-            </div>
-          ))}
-        </div>
       </div>
     );
   }
