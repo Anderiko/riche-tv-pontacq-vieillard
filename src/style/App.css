@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  position: relative;
 }
 
 .App-logo {
@@ -40,4 +40,117 @@
 .leaflet-container {
   width: 100%;
   height: 100vh;
+}
+
+.map-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+}
+
+.chat-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30vw;
+  height: 100vh;
+  background-color: #f7f7f7;
+  border-left: 1px solid #ccc;
+  z-index: 1000;
+}
+
+.chat-messages-container {
+  overflow-y: scroll;
+  height: calc(100vh - 4rem);
+}
+
+.message {
+  margin: 1.5em;
+}
+
+.message{
+  box-sizing: border-box;
+  min-height: 2.25rem;
+  width: fit-content;
+}
+
+.message-content {
+  width: fit-content;
+  padding: 0.5rem 1rem;
+  background: #FFF;
+  border-radius: 1.125rem 1.125rem 1.125rem 0;
+  box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
+}
+
+.chat-container .timestamp {
+  font-size: 0.6rem;
+  color: #555;
+  margin-top: .4rem;
+}
+
+.chat-container .message-name {
+  font-size: 0.8rem;
+  margin-left: .8rem;
+  margin-bottom: .4rem;
+  color: #555;
+}
+
+.my-message {
+  margin: 1rem 1rem 1rem auto;
+  text-align: right;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-end;
+  flex-direction: column;
+}
+
+.my-message .message-content {
+  color: white;
+  background: #333;
+  border-radius: 1.125rem 1.125rem 0 1.125rem;
+}
+
+.my-message .message-name {
+  margin-right: .8rem;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.chat-container form {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  height: 4rem;
+  background-color: #f0f0f0;
+}
+
+.chat-container input {
+  border:none;
+  background-image:none;
+  background-color: white;
+  padding: 0.5rem 1rem;
+  margin-right: 1rem;
+  border-radius: 1.125rem;
+  box-shadow: 0 0 1rem rgba(black, 0.1), 0rem 1rem 1rem -1rem rgba(black, 0.2);
+  
+  font-family: Red hat Display, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.025em;
+}
+
+.chat-container button {
+  border: none;
+  background-image: none;
+  background-color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 1.125rem;
+  box-shadow: 0 0 1rem rgba(black, 0.1), 0rem 1rem 1rem -1rem rgba(black, 0.2);
+  cursor: pointer;
+  font-family: Red hat Display, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.025em;
 }

@@ -1,23 +1,16 @@
-import logo from '../style/logo.svg';
 import '../style/App.css';
+import {Map} from './Map';
+import { Chat } from './Chat';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="map-container">
+        <Map position={[37.33462649252493, -122.00897348937217]}/>
+      </div>
+      <div className="chat-container">
+        <Chat/>
+      </div>
     </div>
   );
 }
