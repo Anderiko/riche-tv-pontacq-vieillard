@@ -1,11 +1,11 @@
-import React from "react";
-import { MapContainer } from 'react-leaflet/MapContainer';
-import { TileLayer } from 'react-leaflet/TileLayer';
-import { Marker } from 'react-leaflet/Marker';
-import { Popup } from 'react-leaflet/Popup';
-import PropTypes from "prop-types";
-import '../style/App.css';
+import React from 'react';
+import PropTypes from 'prop-types';
+import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import '../style/App.css';
 
 export class Map extends React.Component {
 
@@ -18,6 +18,11 @@ export class Map extends React.Component {
     };
 
     render() {
+        let DefaultIcon = L.icon({
+            iconUrl: icon,
+            shadowUrl: iconShadow
+        });
+        L.Marker.prototype.options.icon = DefaultIcon;
         return (
             <MapContainer center={this.props.position} zoom={13} scrollWheelZoom={false}>
                 <TileLayer
