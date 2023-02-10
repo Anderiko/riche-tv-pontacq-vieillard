@@ -1,80 +1,138 @@
+:root {
+  --header-size: 3rem;
+  --right-panel-width: 40vw;
+}
+
+
+* {
+  box-sizing: border-box;
+}
+
+
 .App {
   position: relative;
+  overflow: hidden;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  flex-direction: row;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.tabs-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  width: var(--right-panel-width);
 }
 
-.App-link {
-  color: #61dafb;
+
+.tab-header {
+  display: flex;
+  flex-direction: row;
+  height: var(--header-size);
+  margin: 0;
+  padding: 0;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+
+.tab-item {
+  flex-grow: 1;
+  padding: 1rem;
+  text-align: center;
+  cursor: pointer;
+  list-style-type: none;
 }
 
-.leaflet-container {
-  width: 100%;
-  height: 100vh;
+
+.tab-item.active {
+  border-bottom: 2px solid cornflowerblue;
 }
 
-.map-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100vh;
+
+.tab-item:not(.active) {
+  background-color: rgba(0, 0, 0, 0.05);
 }
+
+
+.tab-content {
+  height: 100%;
+  flex-direction: column;
+}
+
+
+.chat-container, .map-container, .leaflet-container {
+  height: calc(100vh - var(--header-size));
+  width: var(--right-panel-width);
+}
+
 
 .chat-container {
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 30vw;
-  height: 100vh;
   background-color: #f7f7f7;
   border-left: 1px solid #ccc;
-  z-index: 1000;
 }
+
+
+.movie-container {
+  width: calc(100vw - var(--right-panel-width));
+}
+
+.movie {
+  height: 100vh;
+}
+
+.movie video {
+  width: 100%;
+  max-height: calc(100% - 10rem)!important;
+  max-width: 100%!important;
+}
+
+
+.movie ul {
+  overflow-y: scroll;
+  padding: 0 0 1rem 0;
+  margin: 0;
+}
+
+.movie li {
+  cursor: pointer;
+  padding: 1rem;
+}
+
+.movie li:hover {
+  background-color: rgba(0, 0, 0, .2);
+}
+
+
+
 
 .chat-messages-container {
   overflow-y: scroll;
-  height: calc(100vh - 4rem);
+  height: calc(100vh - var(--header-size) - 4rem);
 }
+
+
+.chat-container:not(.active), .map-container:not(.active) {
+  display: none;
+  width: 0;
+}
+
+
+.map-container.active .leaflet-container {
+  width: var(--right-panel-width);
+}
+
 
 .message {
   margin: 1.5em;
 }
+
 
 .message{
   box-sizing: border-box;
   min-height: 2.25rem;
   width: fit-content;
 }
+
 
 .message-content {
   width: fit-content;
@@ -84,11 +142,13 @@
   box-shadow: 0 0 0.5rem rgba(0, 0, 0, 0.1);
 }
 
+
 .chat-container .timestamp {
   font-size: 0.6rem;
   color: #555;
   margin-top: .4rem;
 }
+
 
 .chat-container .message-name {
   font-size: 0.8rem;
@@ -96,6 +156,7 @@
   margin-bottom: .4rem;
   color: #555;
 }
+
 
 .my-message {
   margin: 1rem 1rem 1rem auto;
@@ -106,19 +167,18 @@
   flex-direction: column;
 }
 
+
 .my-message .message-content {
   color: white;
   background: #333;
   border-radius: 1.125rem 1.125rem 0 1.125rem;
 }
 
+
 .my-message .message-name {
   margin-right: .8rem;
 }
 
-* {
-  box-sizing: border-box;
-}
 
 .chat-container form {
   display: flex;
@@ -128,6 +188,7 @@
   background-color: #f0f0f0;
 }
 
+
 .chat-container input {
   border:none;
   background-image:none;
@@ -135,12 +196,13 @@
   padding: 0.5rem 1rem;
   margin-right: 1rem;
   border-radius: 1.125rem;
-  box-shadow: 0 0 1rem rgba(black, 0.1), 0rem 1rem 1rem -1rem rgba(black, 0.2);
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1), 0rem 1rem 1rem -1rem rgba(0, 0, 0, 0.2);
   
   font-family: Red hat Display, sans-serif;
   font-weight: 400;
   letter-spacing: 0.025em;
 }
+
 
 .chat-container button {
   border: none;
@@ -148,7 +210,7 @@
   background-color: white;
   padding: 0.5rem 1rem;
   border-radius: 1.125rem;
-  box-shadow: 0 0 1rem rgba(black, 0.1), 0rem 1rem 1rem -1rem rgba(black, 0.2);
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1), 0 1rem 1rem -1rem rgba(0, 0, 0, 0.2);
   cursor: pointer;
   font-family: Red hat Display, sans-serif;
   font-weight: 400;

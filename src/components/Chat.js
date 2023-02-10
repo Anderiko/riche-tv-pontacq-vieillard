@@ -62,7 +62,7 @@ export class Chat extends React.Component {
           {this.state.chatHistory.map((data, index) => (
             <div key={index} className={`message ${this.state.name.toLowerCase() === data.name.toLowerCase() ? "my-message" : ""}`}>
               <div className="message-name">{data.name}</div>
-              
+
               <div className="message-content">
                 <div className="message-text">{data.message}</div>
               </div>
