@@ -1,17 +1,20 @@
 import React, {useEffect, useRef, useState} from 'react';
+import {useSelector} from "react-redux";
 
-export function Chat() {
+export function Chat({momentCallback}) {
     const [socket, setSocket] = useState(null)
     const [form, setForm] = useState({
         name: '',
         message: '',
-        moment: ''
+        moment: false
     })
     const [chatHistory, setChatHistory] = useState([])
 
     const chatRef = useRef()
 
     const formatter = new Intl.DateTimeFormat('fr-FR', {year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', second: '2-digit'});
+
+    const videoTime = useSelector((state) => state.videoTime)
 
     useEffect(() => {
         const skt = new WebSocket('wss://imr3-react.herokuapp.com/')
@@ -47,7 +50,7 @@ export function Chat() {
                 when: currentTime,
                 name: form.name,
                 message: form.message,
-                moment: form.moment
+                moment: form.moment ? parseInt(videoTime) : ''
             })
         );
 
@@ -65,6 +68,16 @@ export function Chat() {
                             <div className="message-text">{data.message}</div>
                         </div>
 
+                        {
+                            data.moment ?
+
+                                <div className="moment">
+                                    Moment partagé : <span onClick={() => momentCallback(data.moment)}>{data.moment}</span>
+                                </div>
+
+                                : null
+                        }
+
                         <div className="timestamp">
                             {formatter.format(data.when)}
                         </div>
@@ -74,20 +87,31 @@ export function Chat() {
 
 
             <form onSubmit={sendMessage}>
-                <input
-                    type="text"
-                    placeholder="Your name"
-                    value={form.name}
-                    onChange={(event) => setForm({...form, name: event.target.value})}
-                />
-                <input
-                    type="text"
-                    placeholder="Type a message"
-                    value={form.message}
-                    onChange={(event) => setForm({...form, message: event.target.value})}
-                    autoFocus
-                />
-                <button type="submit">→</button>
+                <div className="moment-row">
+                    <input
+                        id="checkboxMoment"
+                        type="checkbox"
+                        checked={form.moment}
+                        onChange={(event) => setForm({...form, moment: !form.moment})}
+                    />
+                    <label htmlFor="checkboxMoment">Include a moment</label>
+                </div>
+                <div className="input-row">
+                    <input
+                        type="text"
+                        placeholder="Your name"
+                        value={form.name}
+                        onChange={(event) => setForm({...form, name: event.target.value})}
+                    />
+                    <input
+                        type="text"
+                        placeholder="Type a message"
+                        value={form.message}
+                        onChange={(event) => setForm({...form, message: event.target.value})}
+                        autoFocus
+                    />
+                    <button type="submit">→</button>
+                </div>
             </form>
         </div>
     );

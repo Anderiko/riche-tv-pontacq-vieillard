@@ -1,6 +1,7 @@
 :root {
   --header-size: 3rem;
   --right-panel-width: 40vw;
+  --input-size: 6rem;
 }
 
 
@@ -107,7 +108,7 @@
 
 .chat-messages-container {
   overflow-y: scroll;
-  height: calc(100vh - var(--header-size) - 4rem);
+  height: calc(100vh - var(--header-size) - var(--input-size));
 }
 
 
@@ -150,11 +151,24 @@
 }
 
 
+.chat-container .moment {
+  font-size: 0.8rem;
+  color: #333;
+  margin-top: .4rem;
+}
+
+
+.chat-container .moment span {
+  color: cornflowerblue;
+  cursor: pointer;
+}
+
+
 .chat-container .message-name {
   font-size: 0.8rem;
   margin-left: .8rem;
   margin-bottom: .4rem;
-  color: #555;
+  color: #333;
 }
 
 
@@ -182,11 +196,36 @@
 
 .chat-container form {
   display: flex;
-  align-items: center;
+  flex-direction: column;
   justify-content: space-around;
-  height: 4rem;
+  height: var(--input-size);
   background-color: #f0f0f0;
-  padding: 0 1rem 0 1rem;
+  padding: 0 1rem .5rem 1rem;
+}
+
+
+.chat-container .moment-row {
+  display: flex;
+  align-items: center;
+}
+
+.chat-container form .input-row {
+  display: flex;
+  align-items: center;
+}
+
+
+.chat-container form label {
+  font-family: Red hat Display, sans-serif;
+  font-weight: 400;
+  color: #555;
+}
+
+
+.chat-container form input[type="checkbox"] {
+  width: 1rem;
+  height: 1rem;
+  flex-grow: 0!important;
 }
 
 

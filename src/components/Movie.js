@@ -1,60 +1,74 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
+import {useDispatch} from "react-redux";
 
-export function Movie() {
-
-    const [data, setData] = useState(null)
+export function Movie(props) {
+    const dispatch = useDispatch()
     const [videoHeight, setVideoHeight] = useState(0)
-    const [videoPlayer, setVideoPlayer] = useState(null)
     const [chaptersElt, setChaptersElt] = useState(null)
     const [videoListener, setVideoListener] = useState(false)
 
+    const videoRef = useRef()
+
     const handleLoad = () => {
-        console.log("Set height : " + videoPlayer.offsetHeight)
-        setVideoHeight(videoPlayer.offsetHeight);
+        // console.log("Set height : " + videoRef.current.offsetHeight)
+        setVideoHeight(videoRef.current.offsetHeight);
     };
+
+    const handleTimeChange = () => {
+        // if (videoRef.current) setTime(videoRef.current.currentTime)
+        dispatch({type: 'SET_VIDEO_TIME', time: videoRef.current.currentTime})
+    }
 
     useEffect(() => {
 
-        fetch("https://imr3-react.herokuapp.com/backend")
-            .then(res => res.json())
-            .then(data => setData(data))
-
         return () => {
-            if (videoPlayer) videoPlayer.removeEventListener('resize', handleLoad);
+            if (videoRef.current) {
+                videoRef.current.removeEventListener('resize', handleLoad);
+                videoRef.current.removeEventListener('timeupdate', handleTimeChange);
+            }
             window.removeEventListener('resize', handleLoad);
         };
 
     }, []);
 
     useEffect(() => {
-        if (videoPlayer && !videoListener) {
-            videoPlayer.addEventListener('resize', handleLoad);
+        let ref = videoRef.current
+        if (ref && !videoListener) {
+            ref.addEventListener('resize', handleLoad);
+            ref.addEventListener('timeupdate', handleTimeChange);
             window.addEventListener('resize', handleLoad);
             setVideoListener(true)
         }
-    }, [videoPlayer]);
+    }, [videoRef]);
 
     useEffect(() => {
-        if (videoPlayer && chaptersElt) {
+        if (videoRef.current && chaptersElt) {
             const remainingHeight = window.innerHeight - videoHeight;
             chaptersElt.style.maxHeight = `${remainingHeight}px`;
         }
     }, [videoHeight])
 
-    const chapterHandle = (timestamp) => {
-        if (videoPlayer) videoPlayer.currentTime = timestamp
+    useEffect(() => {
+        if (props.onMomentClicked !== -1) {
+            setVideoTimestamp(props.onMomentClicked)
+            props.momentCallback(-1)
+        }
+    }, [props.onMomentClicked])
+
+    const setVideoTimestamp = (timestamp) => {
+        if (videoRef.current) videoRef.current.currentTime = timestamp
     }
 
     return (
         <div className="movie">
-            <video ref={ref => setVideoPlayer(ref)} controls src={data ? data["Film"]["file_url"] : null} />
+            <video ref={videoRef} controls src={props.Film ? props.Film["file_url"] : null} />
             <ul ref={ref => setChaptersElt(ref)}>
                 {
-                    data ? data["Chapters"].map(chapter => (
-                        <li key={chapter.pos} onClick={() => chapterHandle(chapter.pos)}>
+                    props.Chapters ? props.Chapters.map(chapter => (
+                        <li key={chapter.pos} onClick={() => setVideoTimestamp(chapter.pos)}>
                             {chapter.title}
                         </li>
-                    )) : ""
+                    )) : "No chapters found."
                 }
             </ul>
         </div>
