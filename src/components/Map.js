@@ -4,7 +4,9 @@ import 'leaflet/dist/leaflet.css';
 import {MapContainer, Marker, Popup, TileLayer, useMap} from 'react-leaflet';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
-import '../style/App.css';
+import '../style/Map.css';
+import {useSelector} from "react-redux";
+import {formatSeconds} from "../helpers";
 
 export function Map(props) {
     const [mapCenter, setMapCenter] = useState(null)
@@ -20,37 +22,72 @@ export function Map(props) {
         }
     }, [props.Waypoints])
 
+    const updateCenterCallback = (center) => {
+        setMapCenter(center)
+    }
+
     return (
         <MapContainer center={props.position} zoom={13} scrollWheelZoom={false}>
             <TileLayer attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"/>
 
             {
                 props.Waypoints ? props.Waypoints.map((waypoint, index) => (
                     <Marker key={index} position={[waypoint.lat, waypoint.lng]}>
-                        <Popup>{waypoint.name}</Popup>
+                        <Popup>
+                            {waypoint.label} <br/>
+                            <span onClick={() => props.momentCallback(waypoint.timestamp)} style={{cursor: "pointer"}}><strong>Moment : {formatSeconds(waypoint.timestamp)}</strong></span>
+                        </Popup>
                     </Marker>
                 )) : ""
             }
             <ResizeMap center={mapCenter} zoom={13}/>
+            <UpdateMapMarker waypoints={props.Waypoints}
+                             currentCenter={mapCenter}
+                             updateCenterCallback={updateCenterCallback}/>
         </MapContainer>
     );
 }
 
 
-
-function ResizeMap({center, zoom})
-{
+function ResizeMap({center, zoom}) {
     const map = useMap()
     setTimeout(() => {
         map.invalidateSize()
     }, 100);
 
-    if (center) {
+    useEffect(() => {
+        if (center) {
+            map.setView(center, zoom)
+        }
+    }, [center])
 
-        console.log("Setting center to : ", center)
-        map.setView(center, zoom)
-    }
     return null
 }
 
+
+function UpdateMapMarker({updateCenterCallback, waypoints, currentCenter}) {
+    const videoTime = useSelector((state) => state.videoTime)
+    const map = useMap()
+
+    useEffect(() => {
+        // console.log("Mise a jour des markers ", videoTime)
+        if (waypoints) {
+            let center = waypoints
+                .filter(waypoint => waypoint.timestamp <= videoTime)
+                .slice(-1)[0]
+
+            center = center ? {
+                lat: center.lat,
+                lng: center.lng
+            } : waypoints[0]
+
+            if (center && (currentCenter.lat !== center.lat || currentCenter.lng !== center.lng)) {
+
+                updateCenterCallback(center)
+            }
+        }
+    }, [videoTime])
+
+    return null
+}

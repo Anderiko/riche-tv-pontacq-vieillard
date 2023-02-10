@@ -1,8 +1,10 @@
 import React, {useEffect, useRef, useState} from "react";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
+import '../style/Movie.css'
 
 export function Movie(props) {
     const dispatch = useDispatch()
+    const videoTime = useSelector((state) => state.videoTime)
     const [videoHeight, setVideoHeight] = useState(0)
     const [chaptersElt, setChaptersElt] = useState(null)
     const [videoListener, setVideoListener] = useState(false)
@@ -61,14 +63,36 @@ export function Movie(props) {
 
     return (
         <div className="movie">
-            <video ref={videoRef} controls src={props.Film ? props.Film["file_url"] : null} />
-            <ul ref={ref => setChaptersElt(ref)}>
+            <video ref={videoRef} controls src={props.Film ? props.Film["file_url"] : null}/>
+            <ul ref={ref => setChaptersElt(ref)} className="chapters">
                 {
                     props.Chapters ? props.Chapters.map(chapter => (
-                        <li key={chapter.pos} onClick={() => setVideoTimestamp(chapter.pos)}>
+                        <li key={`chapter_${chapter.pos}`} onClick={() => setVideoTimestamp(chapter.pos)}
+                            className={`
+                            ${props.Chapters
+                                .filter(chapter => chapter.pos <= videoTime)
+                                .slice(-1)[0].pos === chapter.pos ? "active" : "" }`}>
                             {chapter.title}
                         </li>
                     )) : "No chapters found."
+                }
+            </ul>
+
+            <ul className="keywords">
+                {
+                    props.Keywords ? props.Keywords
+                        .filter(keyword => keyword.pos <= videoTime)
+                        .slice(-1)
+                        .map(keyword => (
+                            <li key={`keyword_${keyword.pos}`}
+                                className={`${videoTime < keyword.pos ? "" : "active"}`}>
+                                {
+                                    keyword.data.map((data, index) => (
+                                        <a href={data.url} key={`link_${index}`} target="_blank">{data.title}</a>
+                                    ))
+                                }
+                            </li>
+                        )) : "No keywords found"
                 }
             </ul>
         </div>

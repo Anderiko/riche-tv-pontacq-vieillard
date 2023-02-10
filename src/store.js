@@ -7,7 +7,6 @@ const initialState = {
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case 'SET_VIDEO_TIME':
-            console.log('update time')
             return { ...state, videoTime: action.time };
         default:
             return state;

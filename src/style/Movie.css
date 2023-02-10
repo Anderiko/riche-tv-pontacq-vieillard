@@ -1,0 +1,72 @@
+
+.movie-container {
+    width: calc(100vw - var(--right-panel-width));
+}
+
+.movie {
+    height: 100vh;
+}
+
+.movie video {
+    width: 100%;
+    max-height: calc(100% - 10rem) !important;
+    max-width: 100% !important;
+}
+
+
+.movie ul.chapters {
+    overflow-y: scroll;
+    padding: .5rem 0 1rem 0;
+    margin: 0;
+}
+
+
+.movie .chapters li {
+    cursor: pointer;
+    padding: 1rem;
+}
+
+
+.movie .chapters li.active {
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+
+.movie .chapters li:hover {
+    background-color: rgba(0, 0, 0, .2);
+}
+
+
+.movie .keywords {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    margin: 0;
+    transition: .5s;
+}
+
+.movie .keywords:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+
+.movie .keywords li {
+    list-style-type: none;
+}
+
+.movie .keywords li:not(.active) {
+    display: none;
+}
+
+.movie .keywords li a {
+    color: white;
+    text-decoration: none;
+    padding: 1rem;
+    display: inline-block;
+}
+
+.movie .keywords li a:hover {
+    text-decoration: underline;
+}

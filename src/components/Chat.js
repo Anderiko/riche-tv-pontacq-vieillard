@@ -1,5 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {useSelector} from "react-redux";
+import {formatSeconds} from "../helpers";
+import '../style/Chat.css'
 
 export function Chat({momentCallback}) {
     const [socket, setSocket] = useState(null)
@@ -72,7 +74,7 @@ export function Chat({momentCallback}) {
                             data.moment ?
 
                                 <div className="moment">
-                                    Moment partagé : <span onClick={() => momentCallback(data.moment)}>{data.moment}</span>
+                                    Moment partagé : <span onClick={() => momentCallback(data.moment)}>{formatSeconds(data.moment)}</span>
                                 </div>
 
                                 : null

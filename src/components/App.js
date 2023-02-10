@@ -59,7 +59,8 @@ export function App() {
 
                     <div className={`map-container ${tabShown === 1 ? "active" : ""}`}>
                         <Map position={[37.33462649252493, -122.00897348937217]}
-                             Waypoints={data ? data["Waypoints"] : null}/>
+                             Waypoints={data ? data["Waypoints"] : null}
+                             momentCallback={onMomentCallback}/>
                     </div>
                 </div>
             </div>
