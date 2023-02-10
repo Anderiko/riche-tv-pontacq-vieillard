@@ -33,8 +33,7 @@ export function App() {
                        Keywords={data ? data["Keywords"] : null}
                        onMomentClicked={moment}
                        momentCallback={onMomentCallback}
-                       onVideoTimestampCallback={onVideoTimestampCallback}
-                />
+                       onVideoTimestampCallback={onVideoTimestampCallback} />
             </div>
 
             <div className="tabs-container">
@@ -54,13 +53,13 @@ export function App() {
 
                 <div className="tab-content">
                     <div className={`chat-container ${tabShown === 0 ? "active" : ""}`}>
-                        <Chat momentCallback={onMomentCallback}/>
+                        <Chat momentCallback={onMomentCallback} />
                     </div>
 
                     <div className={`map-container ${tabShown === 1 ? "active" : ""}`}>
                         <Map position={[37.33462649252493, -122.00897348937217]}
                              Waypoints={data ? data["Waypoints"] : null}
-                             momentCallback={onMomentCallback}/>
+                             momentCallback={onMomentCallback} />
                     </div>
                 </div>
             </div>
